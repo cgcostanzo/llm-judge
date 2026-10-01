@@ -21,3 +21,4 @@
 # ignore redundant theme copies from `quarto render`
 /beamerthemeerie.sty
 /beamercolorthemeerie.sty
+**/*.quarto_ipynb
