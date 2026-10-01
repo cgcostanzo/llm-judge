@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# RStudio session state
+.Rproj.user/
+
+# quarto and latex render byproducts
+/.quarto/
+*_files/
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.nav
+*.snm
+*.toc
+*.out
+*.synctex.gz
+*.tex
+
+# ignore redundant theme copies from `quarto render`
+/beamerthemeerie.sty
+/beamercolorthemeerie.sty

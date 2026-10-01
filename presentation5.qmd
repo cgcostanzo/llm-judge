@@ -1,0 +1,28 @@
+---
+title: "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena"
+subtitle: "Zheng, Chiang, and Sheng et al. (2023)"
+author:
+  - 'Hins Fang'
+  - 'Charles Costanzo'
+format: erie-beamer
+---
+
+## The models: LLaMA and Vicuna
+
+:::: {.columns}
+::: {.column width="38%"}
+![](images/llama.jpg){height=2in fig-align="center"}
+
+\centering LLaMA (Meta, 2023)
+:::
+::: {.column width="62%"}
+![](images/vicuna.jpg){height=2in fig-align="center"}
+
+\centering Vicuna (LMSYS, 2023)
+:::
+::::
+
+\vfill
+\footnotesize Photos: PA (llama) and Marshallhenrie (vicuña), Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
+
