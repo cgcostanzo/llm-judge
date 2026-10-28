@@ -76,21 +76,20 @@ Where do the names come from?
   \node[ev] (e1) at (0,0) {LLaMA released to researchers; weights leak via BitTorrent};
   \node[ev] (e2) at ([yshift=-4pt]e1.south west) {Vicuna: LMSYS fine-tunes LLaMA on ShareGPT conversations};
   \node[ev, text=blue!70!black, font=\footnotesize\bfseries\boldmath] (e3) at ([yshift=-4pt]e2.south west) {MT-Bench and Chatbot Arena \enspace$\longleftarrow$ Zheng et al. (2023)};
-  \node[ev] (e4) at ([yshift=-4pt]e3.south west) {Llama 2: open weights, commercial use allowed};
-  \node[ev] (e5) at ([yshift=-4pt]e4.south west) {Llama 3: open weights; runs Meta's chatbots on WhatsApp, Instagram, Facebook};
-  \node[ev] (e6) at ([yshift=-4pt]e5.south west) {Llama 4 disappoints; its Arena rank came from an unreleased chat-tuned variant};
-  \node[ev] (e7) at ([yshift=-4pt]e6.south west) {Meta reorganizes AI under new Superintelligence Labs};
-  \node[ev] (e8) at ([yshift=-4pt]e7.south west) {\textbf{Muse Spark:} closed model replaces Llama in Meta's chatbots};
-  \node[ev] (e9) at ([yshift=-4pt]e8.south west) {\textbf{Muse Spark Open:} open weights, but as Muse, not Llama};
+  \node[ev] (e4) at ([yshift=-4pt]e3.south west) {LLaMA 2};
+  \node[ev] (e5) at ([yshift=-4pt]e4.south west) {LLaMA 3};
+  \node[ev] (e6) at ([yshift=-4pt]e5.south west) {LLaMA 4};
+  \node[ev] (e7) at ([yshift=-4pt]e6.south west) {\textbf{Muse Spark}};
+  \node[ev] (e8) at ([yshift=-4pt]e7.south west) {\textbf{Muse Spark Open}};
 
   % spine
   \draw[gray!50, thick] ([xshift=-0.35cm, yshift=0.5ex]e1.base west)
-                     -- ([xshift=-0.35cm, yshift=0.5ex]e9.base west);
+                     -- ([xshift=-0.35cm, yshift=0.5ex]e8.base west);
 
   % dots and dates for ordinary rows
   \foreach \i/\d/\c in {1/Feb 2023/black, 2/Mar 2023/black, 4/Jul 2023/black,
-                        5/Apr 2024/black, 6/Apr 2025/black, 7/Jun 2025/black,
-                        8/Apr 2026/black, 9/Oct 2026/red!70!black} {
+                        5/Apr 2024/black, 6/Apr 2025/black,
+                        7/Apr 2026/black, 8/Oct 2026/red!70!black} {
     \node[dot, \c] at ([xshift=-0.35cm, yshift=0.5ex]e\i.base west) {};
     \node[anchor=base east, inner sep=2pt, text=\c] at ([xshift=-0.6cm]e\i.base west) {\d};
   }
@@ -173,6 +172,19 @@ the money supply.
 :::
 ::::
 
+\vspace{0.6em}
+\onslide<2->{\textbf{Both are factually correct.} But...}
+
+\vspace{0.3em}
+\onslide<3->{The prompt said to ``output the answer only.''
+
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+  \item LLaMA provided its own answer. 
+  \item Vicuna outputted the correct answer verbatim from the four options listed. 
+\end{itemize}
+\vspace{0.3em}
+}
+
 ## Example 1 - Follow-up:
 
 ```{=latex}
@@ -235,4 +247,128 @@ LLaMA-13B should improve by providing relevant, clear, and accurate examples
 to address the user's question. \textbf{Vicuna-13B's response is more helpful,
 relevant, and detailed.}
 \end{chatbox}
+\vspace{0.4em}
+\onslide<2->{\textbf{Vicuna more helpful, relevant, and detailed}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+  \item LLaMA: repetitive, no real examples
+  \item Vicuna: three clear, accurate examples
+\end{itemize}}
+```
+
+## Scores under different benchmarks
+
+Example 1 is an MMLU question.
+
+```{=latex}
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Model & MMLU (5-shot) & MT-Bench score (GPT-4) \\
+\midrule
+LLaMA-13B  & 47.0 & 2.61 \\
+Vicuna-13B & 52.1 & 6.39 \\
+\bottomrule
+\end{tabular}
+
+\vspace{-0.4em}
+{\scriptsize Table 8 in the paper. MT-Bench is scored 1--10 by GPT-4.}
+\end{center}
+```
+
+. . .
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+  \item On MMLU: a 5-point gap
+  \item On human-style preference: Vicuna scores $2.4\times$ higher
+\end{itemize}
+```
+
+**These benchmarks were designed to measure knowledge, not human preferences.**
+
+## Key terms
+
+```{=latex}
+\begin{description}\setlength{\itemsep}{3pt}\setlength{\parskip}{0pt}
+  \item[Base model] Pre-trained on raw text to predict the next token (LLaMA)
+  \item[Instruction fine-tuning] Further training on (instruction, response) pairs so it follows directions (Vicuna)
+  \item[RLHF] Reinforcement learning from human feedback: humans rank outputs, the model is tuned toward the winners (GPT-4, Claude)
+  \item[Aligned model] A base model after either of the above
+\end{description}
+```
+
+. . .
+
+Users strongly prefer aligned models, but *measuring* that is not straightforward.
+
+## Human ratings
+
+Human rating is the gold standard for judging a chatbot.
+
+. . .
+
+However, collecting such data is slow and expensive:
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+  \item Every new model, prompt, and version needs fresh ratings
+  \item Open-ended answers lack a reference solution to check against
+  \item Similarity metrics like BLEU and ROUGE require a reference solution
+\end{itemize}
+```
+
+. . .
+
+\vspace{0.4em}
+**Research question:** can a ``strong'' LLM stand in for the human raters?
+
+## LLM-as-a-judge
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+\item Use a ``strong'' LLM as a surrogate for human raters. 
+\item Show it a question and one or more chatbot answers, and ask it to grade them.
+\end{itemize}
+```
+
+. . .
+
+Models like GPT-4 are themselves trained with RLHF, so they already encode human preferences.
+
+. . .
+
+Check for:
+
+```{=latex}
+\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+  \item What \textbf{biases} does the judge have, and how can we mitigate them? (Section 3)
+  \item Does the judge \textbf{agree with humans}? (Section 4)
+\end{enumerate}
+```
+
+## Paper's contribution
+
+```{=latex}
+\begin{enumerate}\setlength{\itemsep}{4pt}
+  \item Studies LLM judges directly, including prompting, LLM biases, and how to mitigate some of them
+  \item Two human-preference datasets to validate against:
+    \begin{itemize}
+      \item \textbf{MT-Bench}: 80 multi-turn questions, 3K expert votes
+      \item \textbf{Chatbot Arena}: crowdsourced anonymous battles, 30K conversations
+    \end{itemize}
+  \item Main result: GPT-4 agrees with humans over \textbf{80\%} of the time, the same rate humans agree with each other
+\end{enumerate}
+```
+
+## Outline
+
+```{=latex}
+\begin{enumerate}\setlength{\itemsep}{3pt}
+  \item Introduction \hfill \textit{Charles}
+  \item MT-Bench and Chatbot Arena \hfill \textit{Charles}
+  \item LLM as a judge: types, biases, fixes \hfill \textit{Charles}
+  \item Agreement with humans \hfill \textit{Hins}
+  \item Human preference vs.\ standard benchmarks \hfill \textit{Hins}
+  \item Discussion and limitations \hfill \textit{Hins}
+\end{enumerate}
 ```
