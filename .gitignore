@@ -3,6 +3,7 @@
 
 # RStudio session state
 .Rproj.user/
+.Rhistory
 
 # quarto and latex render byproducts
 /.quarto/
