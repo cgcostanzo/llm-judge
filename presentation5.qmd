@@ -81,48 +81,6 @@ Where do the names come from?
 
 \small The vicuña is believed to be the ancestor of the domesticated alpaca.
 
-## The history of LLaMA (2023–2026)
-
-```{=latex}
-\centering
-\begin{tikzpicture}[font=\footnotesize,
-    ev/.style={anchor=north west, text width=0.8\textwidth, inner sep=2pt},
-    dt/.style={anchor=east, inner sep=2pt},
-    dot/.style={circle, fill, inner sep=0pt, minimum size=4.5pt}]
-
-  % events, each placed just below the previous one
-  \node[ev, visible on=<1->] (e1) at (0,0) {LLaMA released to researchers; weights leak via BitTorrent~\cite{meta2023llama}};
-  \node[ev, visible on=<2->] (e2) at ([yshift=-4pt]e1.south west) {Vicuna: LMSYS fine-tunes LLaMA on ShareGPT conversations};
-  \node[ev, visible on=<3->, text=blue!70!black, font=\footnotesize\bfseries\boldmath] (e3) at ([yshift=-4pt]e2.south west) {MT-Bench and Chatbot Arena \enspace$\longleftarrow$ Zheng et al.~\cite{zheng2023judging}};
-  \node[ev, visible on=<4->] (e4) at ([yshift=-4pt]e3.south west) {LLaMA 2~\cite{meta2023llama2}};
-  \node[ev, visible on=<4->] (e5) at ([yshift=-4pt]e4.south west) {LLaMA 3~\cite{meta2024llama3}};
-  \node[ev, visible on=<4->] (e6) at ([yshift=-4pt]e5.south west) {LLaMA 4~\cite{meta2025llama4}};
-  \node[ev, visible on=<5->] (e7) at ([yshift=-4pt]e6.south west) {\textbf{Muse Spark}~\cite{meta2026musespark}};
-  \node[ev, visible on=<6->] (e8) at ([yshift=-4pt]e7.south west) {\textbf{Muse Glimmer}~\cite{meta2026museglimmer}};
-  \node[ev, visible on=<7->] (e9) at ([yshift=-4pt]e8.south west) {\textbf{Muse Spark Open}~\cite{meta2026musesparkopen}};
-
-  % spine, drawn one segment at a time as the rows appear
-  \foreach \a/\b/\o in {1/2/2, 2/3/3, 3/4/4, 4/5/4, 5/6/4, 6/7/5, 7/8/6, 8/9/7} {
-    \draw[gray!50, thick, visible on=<\o->]
-      ([xshift=-0.35cm, yshift=0.5ex]e\a.base west) -- ([xshift=-0.35cm, yshift=0.5ex]e\b.base west);
-  }
-
-  % dots and dates for ordinary rows
-  \foreach \i/\d/\c/\o in {1/Feb 2023/black/1, 2/Mar 2023/black/2, 4/Jul 2023/black/4,
-                           5/Apr 2024/black/4, 6/Apr 2025/black/4, 7/Apr 2026/black/5,
-                           8/Aug 2026/black/6, 9/Oct 2026/red!70!black/7} {
-    \node[dot, \c, visible on=<\o->] at ([xshift=-0.35cm, yshift=0.5ex]e\i.base west) {};
-    \node[anchor=base east, inner sep=2pt, text=\c, visible on=<\o->] at ([xshift=-0.6cm]e\i.base west) {\d};
-  }
-
-  % the highlighted row
-  \node[dot, blue!70!black, minimum size=6pt, visible on=<3->] at ([xshift=-0.35cm, yshift=0.5ex]e3.base west) {};
-  \node[anchor=base east, inner sep=2pt, text=blue!70!black, font=\footnotesize\bfseries, visible on=<3->] at ([xshift=-0.6cm]e3.base west) {Jun 2023};
-
-\end{tikzpicture}
-```
-
-
 ## Example 1:
 
 :::: {.columns}
