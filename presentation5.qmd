@@ -5,6 +5,24 @@ author:
   - 'Hins Fang'
   - 'Charles Costanzo'
 format: erie-beamer
+monofont: Inconsolatazi4-Regular.otf
+monofontoptions:
+  - BoldFont=Inconsolatazi4-Bold.otf
+  - Scale=0.85
+include-in-header:
+  text: |
+    \usepackage{tikz}
+    \usetikzlibrary{backgrounds,fit}
+    \usepackage[most]{tcolorbox}
+    \newtcolorbox{chatbox}[2][]{colback=gray!6, colframe=gray!45,
+      boxrule=0.4pt, arc=2mm, left=5pt, right=5pt, top=3pt, bottom=4pt,
+      title={\sffamily #2}, fonttitle=\scriptsize\bfseries,
+      coltitle=black, colbacktitle=gray!18,
+      fontupper=\ttfamily\scriptsize\raggedright, #1}
+    \newcommand{\ev}[4]{%
+    \fill[#2] (0,-#1*0.55) circle (2.2pt);
+    \node[anchor=east, text=#2] at (-0.25,-#1*0.55) {#3};
+    \node[anchor=west, text=#2, text width=8.5cm] at (0.25,-#1*0.55) {#4};}
 ---
 
 ## The models: LLaMA and Vicuna
@@ -13,16 +31,208 @@ format: erie-beamer
 ::: {.column width="38%"}
 ![](images/llama.jpg){height=2in fig-align="center"}
 
-\centering LLaMA (Meta, 2023)
+\centering LLaMA-13B (Meta, 2023)
 :::
 ::: {.column width="62%"}
 ![](images/vicuna.jpg){height=2in fig-align="center"}
 
-\centering Vicuna (LMSYS, 2023)
+\centering Vicuna-13B (LMSYS, 2023)
 :::
 ::::
 
 \vfill
-\footnotesize Photos: PA (llama) and Marshallhenrie (vicuña), Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+\scriptsize Photos: PA (llama) and Marshallhenrie (vicuña), Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
+## Why "LLaMA" and "Vicuna"?
 
+Where do the names come from?
+
+. . .
+
+**LLaMA** is an acronym: **L**arge **La**nguage **M**odel Meta **A**I
+
+**Vicuna** is a fine-tuned LLaMA from LMSYS, named after a relative of the llama:
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+  \item Llama $\to$ Meta's base model
+  \item Alpaca $\to$ Stanford's fine-tune
+  \item Vicuna $\to$ LMSYS's fine-tune, trained on ShareGPT conversations
+\end{itemize}
+```
+
+\small The vicuña is believed to be the ancestor of the domesticated alpaca.
+
+## The end of LLaMA? (2023–2026)
+
+```{=latex}
+\centering
+\begin{tikzpicture}[font=\footnotesize,
+    ev/.style={anchor=north west, text width=0.7\textwidth, inner sep=2pt},
+    dt/.style={anchor=east, inner sep=2pt},
+    dot/.style={circle, fill, inner sep=0pt, minimum size=4.5pt}]
+
+  % events, each placed just below the previous one
+  \node[ev] (e1) at (0,0) {LLaMA released to researchers; weights leak via BitTorrent};
+  \node[ev] (e2) at ([yshift=-4pt]e1.south west) {Vicuna: LMSYS fine-tunes LLaMA on ShareGPT conversations};
+  \node[ev, text=blue!70!black, font=\footnotesize\bfseries\boldmath] (e3) at ([yshift=-4pt]e2.south west) {MT-Bench and Chatbot Arena \enspace$\longleftarrow$ Zheng et al. (2023)};
+  \node[ev] (e4) at ([yshift=-4pt]e3.south west) {Llama 2: open weights, commercial use allowed};
+  \node[ev] (e5) at ([yshift=-4pt]e4.south west) {Llama 3: open weights; runs Meta's chatbots on WhatsApp, Instagram, Facebook};
+  \node[ev] (e6) at ([yshift=-4pt]e5.south west) {Llama 4 disappoints; its Arena rank came from an unreleased chat-tuned variant};
+  \node[ev] (e7) at ([yshift=-4pt]e6.south west) {Meta reorganizes AI under new Superintelligence Labs};
+  \node[ev] (e8) at ([yshift=-4pt]e7.south west) {\textbf{Muse Spark:} closed model replaces Llama in Meta's chatbots};
+  \node[ev] (e9) at ([yshift=-4pt]e8.south west) {\textbf{Muse Spark Open:} open weights, but as Muse, not Llama};
+
+  % spine
+  \draw[gray!50, thick] ([xshift=-0.35cm, yshift=0.5ex]e1.base west)
+                     -- ([xshift=-0.35cm, yshift=0.5ex]e9.base west);
+
+  % dots and dates for ordinary rows
+  \foreach \i/\d/\c in {1/Feb 2023/black, 2/Mar 2023/black, 4/Jul 2023/black,
+                        5/Apr 2024/black, 6/Apr 2025/black, 7/Jun 2025/black,
+                        8/Apr 2026/black, 9/Oct 2026/red!70!black} {
+    \node[dot, \c] at ([xshift=-0.35cm, yshift=0.5ex]e\i.base west) {};
+    \node[anchor=base east, inner sep=2pt, text=\c] at ([xshift=-0.6cm]e\i.base west) {\d};
+  }
+
+  % the highlighted row
+  \node[dot, blue!70!black, minimum size=6pt] at ([xshift=-0.35cm, yshift=0.5ex]e3.base west) {};
+  \node[anchor=base east, inner sep=2pt, text=blue!70!black, font=\footnotesize\bfseries] at ([xshift=-0.6cm]e3.base west) {Jun 2023};
+
+\end{tikzpicture}
+```
+
+\vfill
+\scriptsize Sources: [Wikipedia](https://en.wikipedia.org/wiki/Llama_(language_model)); [Reuters via The Guardian, Apr 9, 2026](https://www.theguardian.com/technology/2026/apr/09/meta-first-ai-model-muse-sparks); [TechCrunch, Oct 15, 2026](https://techcrunch.com/2026/10/15/meta-launches-an-open-weight-model-that-runs-on-macs/)
+
+## Example 1:
+
+:::: {.columns}
+::: {.column width="50%"}
+```{=latex}
+\begin{tcolorbox}[colback=gray!6, colframe=gray!45, boxrule=0.4pt, arc=2mm,
+  left=5pt, right=5pt, top=3pt, bottom=4pt,
+  title={\sffamily Question}, fonttitle=\scriptsize\bfseries,
+  coltitle=black, colbacktitle=gray!18]
+\ttfamily\scriptsize\raggedright
+If the FED buys bonds in the secondary market\\[0.3em]
+\textbf<3>{(A) the money supply will increase.}\\
+(B) the money supply will decrease.\\
+(C) the money supply will not be affected.\\
+(D) the discount rate would be affected.\\[0.5em]
+Output the answer only.
+\end{tcolorbox}
+```
+:::
+::: {.column width="50%"}
+```{=latex}
+\visible<2->{%
+\begin{tikzpicture}[scale=0.85, >=stealth, font=\scriptsize]
+  \useasboundingbox (-0.7,-0.7) rectangle (5.6,4.3);
+
+  \draw[->] (0,0) -- (5,0) node[below left=2pt] {Quantity of money};
+  \draw[->] (0,0) -- (0,4) node[above] {Interest rate};
+
+  \draw[thick, domain=0.8:4.6, smooth] plot (\x, {3/\x}) node[right] {$MD$};
+
+  % original supply: solid on slide 2, faded on slide 3
+  \only<2>{\draw[very thick, blue] (2,0) -- (2,3.6) node[above] {$MS_1$};}
+  \only<3>{\draw[thick, blue!35, dashed] (2,0) -- (2,3.6) node[above] {$MS_1$};}
+  \draw[dotted] (0,1.5) node[left] {$i_1$} -- (2,1.5);
+  \fill (2,1.5) circle (1.6pt);
+
+  \only<3>{
+    \draw[very thick, red] (3,0) -- (3,3.6) node[above] {$MS_2$};
+    \draw[->, thick] (2.1,2.8) -- (2.9,2.8);
+    \draw[dotted] (0,1) node[left] {$i_2$} -- (3,1);
+    \fill[red] (3,1) circle (1.6pt);
+  }
+\end{tikzpicture}%
+}
+```
+:::
+::::
+
+## How did they do?
+
+:::: {.columns}
+::: {.column width="48%"}
+```{=latex}
+\begin{chatbox}[colback=blue!5, equal height group=answers]{LLaMA-13B}
+The Federal Reserve buys bonds in the secondary market to increase
+the money supply.
+\end{chatbox}
+```
+:::
+::: {.column width="48%"}
+```{=latex}
+\begin{chatbox}[colback=blue!5, equal height group=answers]{Vicuna-13B}
+(A) the money supply will increase.
+\end{chatbox}
+```
+:::
+::::
+
+## Example 1 - Follow-up:
+
+```{=latex}
+\begin{tcolorbox}[colback=gray!6, colframe=gray!45, boxrule=0.4pt, arc=2mm,
+  left=5pt, right=5pt, top=3pt, bottom=4pt,
+  title={\sffamily Follow-up Question}, fonttitle=\scriptsize\bfseries,
+  coltitle=black, colbacktitle=gray!18]
+\ttfamily\scriptsize\raggedright
+How does it affect my daily life? Give 3 examples
+\end{tcolorbox}
+\vspace{-0.6em}
+\onslide<2->{%
+\begin{columns}[T]
+\begin{column}{0.32\textwidth}
+\begin{chatbox}[colback=blue!5, equal height group=followup, fontupper=\ttfamily\fontsize{7}{8.4}\selectfont\raggedright]{LLaMA-13B}
+The Federal Reserve buys bonds in the secondary market to increase the
+money supply. This affects your daily life by:\\[0.3em]
+1. Increasing the money supply.\\
+2. Increasing the money supply and lowering the discount rate.\\
+3. Increasing the money supply and lowering the discount rate and
+increasing the money supply.
+\end{chatbox}
+\end{column}
+\begin{column}{0.66\textwidth}
+\begin{chatbox}[colback=blue!5, equal height group=followup, fontupper=\ttfamily\fontsize{7}{8.4}\selectfont\raggedright]{Vicuna-13B}
+When the Federal Reserve buys bonds in the secondary market, it can have
+several effects on the economy that can impact your daily life. Here are
+three examples:\\[0.3em]
+1. Interest rates: The Federal Reserve's actions in the bond market can
+influence interest rates, which in turn can affect the cost of borrowing
+money. For example, if the Federal Reserve buys bonds and drives up demand
+for them, interest rates on things like mortgages, car loans, and credit
+cards may go up, making it more expensive to borrow money.\\
+2. Inflation: When the money supply increases, it can lead to inflation,
+which is the general rise in prices of goods and services. This can impact
+your daily life by making it more expensive to buy things like groceries,
+gas, and other necessities.\\
+3. Employment: The Federal Reserve's actions in the bond market can also
+have an impact on employment. For example, if the Federal Reserve's
+actions lead to economic growth and increased demand for goods and
+services, it can create more job opportunities and boost employment.
+\end{chatbox}
+\end{column}
+\end{columns}}
+```
+
+## Example 1 - GPT-4 as judge
+
+```{=latex}
+\begin{chatbox}[colback=green!4, colframe=green!30!gray]{GPT-4 Judgment}
+LLaMA-13B provided an incorrect response to the user's question about how
+the Federal Reserve buying bonds in the secondary market affects daily life.
+The answer given is repetitive and lacks clear examples of how the action
+impacts daily life.\\[0.4em]
+On the other hand, Vicuna-13B provided a relevant and accurate response to
+the user's question about the Federal Reserve buying bonds. The answer
+includes three clear examples of how the action impacts daily life, such as
+interest rates, inflation, and employment.\\[0.4em]
+LLaMA-13B should improve by providing relevant, clear, and accurate examples
+to address the user's question. \textbf{Vicuna-13B's response is more helpful,
+relevant, and detailed.}
+\end{chatbox}
+```
