@@ -23,3 +23,6 @@
 /beamerthemeerie.sty
 /beamercolorthemeerie.sty
 **/*.quarto_ipynb
+
+# API keys
+.env
