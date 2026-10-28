@@ -72,7 +72,7 @@ Where do the names come from?
 
 \small The vicuña is believed to be the ancestor of the domesticated alpaca.
 
-## The end of LLaMA? (2023–2026)
+## The history of LLaMA (2023–2026)
 
 ```{=latex}
 \centering
