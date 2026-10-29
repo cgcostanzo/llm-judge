@@ -11,13 +11,13 @@ monofontoptions:
   - Scale=0.85
 bibliography: references.bib
 cite-method: natbib
-biblio-style: unsrtnat
-natbiboptions: "numbers,square"
+biblio-style: plainnat
+natbiboptions: "authoryear,round"
 biblio-title: References
 include-in-header:
   text: |
     \usepackage{tikz}
-    \usetikzlibrary{backgrounds,fit}
+    \usetikzlibrary{backgrounds,fit,positioning}
     \tikzset{
       invisible/.style={opacity=0, text opacity=0},
       visible on/.style={alt=#1{}{invisible}},
@@ -29,7 +29,7 @@ include-in-header:
     \newcommand{\pollurl}{https://www.menti.com/alq6ux3i3y4o}
     \newcommand{\pollcode}{1479 0094}
     \usepackage{etoolbox}
-    \setbeamertemplate{bibliography item}[text]
+    \setbeamertemplate{bibliography item}{}
     \setbeamertemplate{frametitle continuation}[from second]
     \AtBeginEnvironment{thebibliography}{\scriptsize\setlength{\bibsep}{1pt}}
     \newtcolorbox{chatbox}[2][]{colback=gray!6, colframe=gray!45,
@@ -43,43 +43,153 @@ include-in-header:
     \node[anchor=west, text=#2, text width=8.5cm] at (0.25,-#1*0.55) {#4};}
 ---
 
-## Meet the models: LLaMA and Vicuna
+## Motivation: Evaluating LLMs is hard!
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
+  \item<1-> Human evaluation is the \textbf{gold standard}, but \textbf{slow} and \textbf{expensive}.
+  \item<2-> The authors use state-of-the-art LLMs, like GPT-4, as a \textbf{surrogate} for humans.
+    \begin{itemize}
+      \item<3-> These models are trained with human feedback (RLHF), so they tend to better match human preferences.
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.3em}
+\begin{minipage}[c]{0.66\linewidth}
+\visible<4->{%
+\centering{\Large\bfseries\color{structure} $\rightarrow$ LLM-as-a-Judge}\par}
+\vspace{0.5em}
+\visible<5->{\centering\small Tried before, but never studied systematically.\par}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.3\linewidth}
+\visible<4->{\centering\includegraphics[height=1.0in]{images/judge724_crop.png}\par}
+\end{minipage}
+```
+
+## Motivation: Evaluating LLMs is hard!
+
+:::: {.columns}
+::: {.column width="58%"}
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
+  \item<1-> But how capable are LLM judges?
+  \item<2-> Are they a good substitute for the \textbf{gold standard}---
+    \uncover<3->{or are their preferences closer to \textbf{garbage}?}
+\end{itemize}
+```
+:::
+::: {.column width="42%"}
+```{=latex}
+\begin{center}
+\visible<2->{\includegraphics[width=0.46\linewidth]{images/goldstandard.png}}\hfill
+\visible<3->{\includegraphics[width=0.46\linewidth]{images/garbage.png}}
+\end{center}
+```
+:::
+::::
+
+```{=latex}
+\vspace{0.8em}
+\visible<4->{%
+That is, how well do LLM judges match \textbf{\color{structure}human preferences}?}
+
+\begin{itemize}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
+  \item<5-> (and how do we even \textbf{\color{structure}measure} that?)
+\end{itemize}
+```
+
+## Meet the models: Camelids in the Hot Seat
 
 :::: {.columns}
 ::: {.column width="38%"}
-![](images/llama.jpg){height=2in fig-align="center"}
+![](images/llama.jpg){height=1.8in fig-align="center"}
 
 \centering LLaMA-13B (Meta, 2023)
 :::
 ::: {.column width="62%"}
-![](images/vicuna.jpg){height=2in fig-align="center"}
+![](images/vicuna.jpg){height=1.8in fig-align="center"}
 
 \centering Vicuna-13B (LMSYS, 2023)
 :::
 ::::
 
-\vfill
-\scriptsize Photos: PA (llama) and Marshallhenrie (vicuña), Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
-
-## Why "LLaMA" and "Vicuna"?
-
-Where do the names come from?
-
-. . .
-
-**LLaMA** is a backronym: **L**arge **La**nguage **M**odel Meta **A**I
-
-**Vicuna** is a fine-tuned LLaMA from LMSYS, named after a relative of the llama:
-
 ```{=latex}
-\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
-  \item Llama $\to$ Meta's base model
-  \item Alpaca $\to$ Stanford's fine-tune
-  \item Vicuna $\to$ LMSYS's fine-tune, trained on ShareGPT conversations
+\begin{itemize}\small
+  \item These two are just our example. The paper evaluates up to 15 chatbots, including GPT-4 and Claude.
 \end{itemize}
 ```
 
-\small The vicuña is believed to be the ancestor of the domesticated alpaca.
+\vfill
+\scriptsize Photos: PA (llama) and Marshallhenrie (vicuña), Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
+## Meet the models: Camelids in the Hot Seat
+
+```{=latex}
+\vspace{0.4em}
+\uncover<2->{\textbf{LLaMA} is a backronym: \textbf{L}arge \textbf{La}nguage \textbf{M}odel Meta \textbf{A}I}
+
+\vspace{0.6em}
+\begin{center}
+\begin{tikzpicture}[font=\small, >=stealth,
+    model/.style={draw=gray!50, fill=gray!8, rounded corners=2pt, align=center,
+                  inner sep=4pt, text width=4.1cm},
+    kid/.style={model, fill=blue!5}]
+  \node[model, visible on=<3->] (llama) at (0,0)
+    {\textbf{LLaMA}\\\footnotesize Meta's base model};
+  \node[kid, visible on=<4->] (alpaca) at (-3.8,-1.7)
+    {\textbf{Alpaca}\\\footnotesize Stanford's fine-tune};
+  \node[kid, draw=structure, line width=0.8pt, visible on=<5->] (vicuna) at (3.8,-1.7)
+    {\textbf{\color{structure}Vicuna}\\\footnotesize Zheng et al.'s fine-tune};
+  \node[below=2pt of vicuna, font=\scriptsize, text=gray!70!black, align=center, visible on=<5->]
+    {trained on ChatGPT chats\\users shared on ShareGPT};
+  \draw[->, thick, gray!60, visible on=<4->] (llama.south) -- (alpaca.north);
+  \draw[->, thick, gray!60, visible on=<5->] (llama.south) -- (vicuna.north);
+  \draw[->, dashed, gray!60, visible on=<6->] (alpaca.east) -- (vicuna.west)
+    node[midway, below, font=\scriptsize, text=gray!70!black] {reused training code};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2em}
+\uncover<7->{\small Both are LLaMA's camelid descendants.}
+```
+
+## Meet the judges: LLMs on the Bench
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[font=\small,
+    podium/.style={fill=gray!12, draw=gray!45, line width=0.4pt},
+    rank/.style={font=\Large\bfseries, text=gray!60}]
+
+  % podium: GPT-4 on top, the two runners-up level with each other
+  \draw[podium, visible on=<2->] (-4.2,0) rectangle (-1.4,0.7);
+  \draw[podium, visible on=<1->] (-1.4,0) rectangle ( 1.4,1.15);
+  \draw[podium, visible on=<2->] ( 1.4,0) rectangle ( 4.2,0.7);
+
+  % judges on top of the steps
+  \node[anchor=south, visible on=<1->] (g4) at (0,1.2)
+    {\includegraphics[height=1.2cm]{images/openai.pdf}};
+  \node[anchor=south, font=\bfseries\color{structure}, visible on=<1->] at (g4.north) {GPT-4};
+
+  \node[anchor=south, visible on=<2->] (g35) at (-2.8,0.75)
+    {\includegraphics[height=0.95cm]{images/openai.pdf}};
+  \node[anchor=south, visible on=<2->] at (g35.north) {GPT-3.5};
+
+  \node[anchor=south, visible on=<2->] (cl) at (2.8,0.75)
+    {\includegraphics[height=0.95cm]{images/claude.pdf}};
+  \node[anchor=south, visible on=<2->] at (cl.north) {Claude-v1};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.2em}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+  \item<3-> All three are checked against \textbf{human} judges:
+    \begin{itemize}
+      \item 58 experts (MT-Bench) and crowdsourced ratings (Chatbot Arena)
+    \end{itemize}
+  \item<4-> The judges are also among the models evaluated, so they sometimes grade their own answers.
+\end{itemize}
+```
 
 ## Example 1:
 
@@ -273,7 +383,7 @@ the money supply.
 \onslide<2->{\textbf{Both are factually correct.} But...}
 
 \vspace{0.3em}
-\onslide<3->{The prompt said to ``output the answer only.''
+\onslide<3->{The prompt said to ``output the answer only."
 
 \begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
   \item LLaMA provided its own answer.
@@ -282,7 +392,7 @@ the money supply.
 
 ## Scores under different benchmarks
 
-Example 1 is an MMLU question.
+Example 1 is an MMLU^[Massive Multitask Language Understanding [@hendrycks2021MMLU]] question.
 
 ```{=latex}
 \begin{center}
@@ -309,91 +419,29 @@ Vicuna-13B & 52.1 & 6.39 \\
 \end{itemize}
 ```
 
-**These benchmarks were designed to measure knowledge, not human preferences.**
+**MMLU was not designed to measure human preferences.**
 
-## Key terms
+## What we'll dig into
 
-```{=latex}
-\begin{description}\setlength{\itemsep}{3pt}\setlength{\parskip}{0pt}
-  \item[Base model] Pre-trained on raw text to predict the next token (LLaMA)
-  \item[Instruction fine-tuning] Further training on (instruction, response) pairs so it follows directions (Vicuna)
-  \item[RLHF] Reinforcement learning from human feedback: humans rank outputs, the model is tuned toward the winners (GPT-4, Claude)
-  \item[Aligned model] A base model after either of the above
-\end{description}
-```
-
-. . .
-
-Users strongly prefer aligned models, but *measuring* that is not straightforward.
-
-## Human ratings
-
-Human rating is the gold standard for judging a chatbot.
-
-. . .
-
-However, collecting such data is slow and expensive:
+\nocite{zheng2023judging}
 
 ```{=latex}
-\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
-  \item Every new model, prompt, and version needs fresh ratings
-  \item Open-ended answers lack a reference solution to check against
-  \item Similarity metrics like BLEU and ROUGE require a reference solution
-\end{itemize}
-```
-
-. . .
-
-\vspace{0.4em}
-**Research question:** can a ``strong'' LLM stand in for the human raters?
-
-## LLM-as-a-judge
-
-```{=latex}
-\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
-\item Use a ``strong'' LLM as a surrogate for human raters. 
-\item Show it a question and one or more chatbot answers, and ask it to grade them.
-\end{itemize}
-```
-
-. . .
-
-Models like GPT-4 are themselves trained with RLHF, so they already encode human preferences.
-
-. . .
-
-Check for:
-
-```{=latex}
-\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
-  \item What \textbf{biases} does the judge have, and how can we mitigate them? (Section 3)
-  \item Does the judge \textbf{agree with humans}? (Section 4)
-\end{enumerate}
-```
-
-## Paper's contribution
-
-```{=latex}
-\begin{enumerate}\setlength{\itemsep}{4pt}
-  \item Studies LLM judges directly, including prompting, LLM biases, and how to mitigate some of them
-  \item Two human-preference datasets to validate against:
+\begin{itemize}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
+  \item<1-> \textbf{Ground truth:} collecting human preferences to evaluate LLM judges against
     \begin{itemize}
       \item \textbf{MT-Bench}: 80 multi-turn questions, 3K expert votes
       \item \textbf{Chatbot Arena}: crowdsourced anonymous battles, 30K conversations
     \end{itemize}
-  \item Main result: GPT-4 agrees with humans over \textbf{80\%} of the time, the same rate humans agree with each other
-\end{enumerate}
+  \item<2-> \textbf{Limitations:} LLM biases and reasoning errors, and addressing some of them
+  \item<3-> \textbf{Agreement:} how often LLM judges match human preferences
+\end{itemize}
 ```
 
-## Outline
-
-```{=latex}
-\begin{enumerate}\setlength{\itemsep}{3pt}
-  \item Introduction \hfill \textit{Charles}
-  \item MT-Bench and Chatbot Arena \hfill \textit{Charles}
-  \item LLM as a judge: types, biases, fixes \hfill \textit{Charles}
-  \item Agreement with humans \hfill \textit{Hins}
-  \item Human preference vs.\ standard benchmarks \hfill \textit{Hins}
-  \item Discussion and limitations \hfill \textit{Hins}
-\end{enumerate}
-```
+<!--
+NOTE for the opener of the judge/biases part (paper Sec. 3, first paragraph):
+Why do we need a judge at all? Rule-based scores compare an answer to a
+reference answer, but open-ended questions don't have one. The paper names
+BLEU and ROUGE here; we can make the point without naming or defining them,
+e.g. "Automatic scores need a correct answer to compare against. Open-ended
+questions don't have one." Keeps us from defining yet more benchmarks.
+-->
