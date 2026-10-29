@@ -49,20 +49,26 @@ include-in-header:
 \begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
   \item<1-> Human evaluation is the \textbf{gold standard}, but \textbf{slow} and \textbf{expensive}.
   \item<2-> The authors use state-of-the-art LLMs, like GPT-4, as a \textbf{surrogate} for humans.
-    \begin{itemize}
-      \item<3-> These models are trained with human feedback (RLHF), so they tend to better match human preferences.
-    \end{itemize}
 \end{itemize}
 
-\vspace{0.3em}
-\begin{minipage}[c]{0.66\linewidth}
-\visible<4->{%
+\vspace{-0.4em}
+\begin{minipage}[t]{0.6\linewidth}
+\begin{itemize}
+  \item[]\vspace{-0.75em}\begin{itemize}
+    \item<3-> Trained with reinforcement learning from human feedback (RLHF).
+    \item<4-> Tend to better match humans. 
+  \end{itemize}
+\end{itemize}
+
+\vspace{0.8em}
+\visible<5->{%
 \centering{\Large\bfseries\color{structure} $\rightarrow$ LLM-as-a-Judge}\par}
 \vspace{0.5em}
-\visible<5->{\centering\small Tried before, but never studied systematically.\par}
+\visible<6->{\centering\small Tried before, but never studied systematically.\par}
 \end{minipage}\hfill
-\begin{minipage}[c]{0.3\linewidth}
-\visible<4->{\centering\includegraphics[height=1.0in]{images/judge724_crop.png}\par}
+\begin{minipage}[t]{0.38\linewidth}
+\vspace{0pt}
+\visible<5->{\centering\includegraphics[height=1.3in]{images/judge724_crop.png}\par}
 \end{minipage}
 ```
 
@@ -98,7 +104,7 @@ That is, how well do LLM judges match \textbf{\color{structure}human preferences
 \end{itemize}
 ```
 
-## Meet the models: Camelids in the Hot Seat
+## Meet the models: camelids in the hot seat
 
 :::: {.columns}
 ::: {.column width="38%"}
@@ -153,7 +159,7 @@ That is, how well do LLM judges match \textbf{\color{structure}human preferences
 \uncover<7->{\small Both are LLaMA's camelid descendants.}
 ```
 
-## Meet the judges: LLMs on the Bench
+## Meet the judges: LLMs on the bench
 
 ```{=latex}
 \begin{center}
@@ -355,7 +361,7 @@ relevant, and detailed.}
 \onslide<2->{\textbf{Vicuna more helpful, relevant, and detailed}
 \begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
   \item LLaMA: repetitive, no real examples
-  \item Vicuna: three clear, accurate examples
+  \item Vicuna: three clear, relevant examples
 \end{itemize}}
 ```
 
@@ -410,18 +416,16 @@ Vicuna-13B & 52.1 & 6.39 \\
 \end{center}
 ```
 
-. . .
-
 ```{=latex}
 \begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
-  \item On MMLU: a 5-point gap
-  \item On human-style preference: Vicuna scores $2.4\times$ higher
+  \item<2-> On MMLU: Vicuna leads by 5 points out of 100
+  \item<3-> On MT-Bench: Vicuna leads by almost 4 points out of 10
 \end{itemize}
+
+\visible<4->{\textbf{MMLU was not designed to measure human preferences.}}
 ```
 
-**MMLU was not designed to measure human preferences.**
-
-## What we'll dig into
+## Key topics
 
 \nocite{zheng2023judging}
 
@@ -429,19 +433,415 @@ Vicuna-13B & 52.1 & 6.39 \\
 \begin{itemize}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
   \item<1-> \textbf{Ground truth:} collecting human preferences to evaluate LLM judges against
     \begin{itemize}
-      \item \textbf{MT-Bench}: 80 multi-turn questions, 3K expert votes
-      \item \textbf{Chatbot Arena}: crowdsourced anonymous battles, 30K conversations
+      \item \textbf{MT-Bench}: 80 multi-turn questions, 3,000 expert votes
+      \item \textbf{Chatbot Arena}: crowdsourced anonymous battles, 30,000 conversations
     \end{itemize}
-  \item<2-> \textbf{Limitations:} LLM biases and reasoning errors, and addressing some of them
+  \item<2-> \textbf{Limitations:} LLM biases and reasoning errors
+  \begin{itemize}
+      \item As well as strategies to address some of them
+    \end{itemize}
   \item<3-> \textbf{Agreement:} how often LLM judges match human preferences
 \end{itemize}
 ```
 
+<!-- ===================== GROUND TRUTH (draft) ===================== -->
+
+## Two new benchmarks
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
+  \item<1-> Recall Example 1:
+    \begin{itemize}
+      \item<2-> MMLU barely separated LLaMA and Vicuna
+      \item<3-> But humans strongly preferred Vicuna
+    \end{itemize}
+  \item<4-> Most existing benchmarks measure \textbf{correctness}
+    \begin{itemize}
+      \item<5-> e.g., MMLU: multiple choice, checked against an answer key
+    \end{itemize}
+  \item<6-> Chatbots are used for \textbf{open-ended}, \textbf{multi-turn} conversations
+    \begin{itemize}
+      \item<7-> No single right answer to check against
+    \end{itemize}
+\end{itemize}
+```
+
+## Two new benchmarks
+
+```{=latex}
+\begin{center}
+{\Large\bfseries New primary evaluation metric:}\\[6pt]
+{\LARGE\bfseries\color{structure} human ratings}
+
+\vspace{1.2em}
+{\large MT-Bench \quad$\cdot$\quad Chatbot Arena}
+\end{center}
+```
+
+## MT-Bench: curated questions, expert judges
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
+  \item<1-> 80 hand-written questions, each with \textbf{two turns}
+  \item<2-> 10 questions in each of 8 categories:
+\end{itemize}
+
+\visible<2->{%
+\begin{center}\small
+\begin{tabular}{llll}
+Writing & Roleplay & Extraction & Reasoning \\
+Math & Coding & Knowledge (STEM) & Knowledge (humanities) \\
+\end{tabular}
+\end{center}}
+
+\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
+  \item<3-> Designed to be hard enough to separate strong models
+  \item<4-> Judged by \textbf{58 experts}
+\end{itemize}
+```
+
+## MT-Bench: what a question looks like
+
+:::: {.columns}
+::: {.column width="50%"}
+```{=latex}
+\begin{chatbox}[equal height group=mtb1]{Writing, turn 1}
+Compose an engaging travel blog post about a recent trip to Hawaii,
+highlighting cultural experiences and must-see attractions.
+\end{chatbox}
+\visible<2->{%
+\begin{chatbox}[colback=green!4, colframe=green!30!gray, equal height group=mtb2]{Writing, turn 2}
+Rewrite your previous response. Start every sentence with the letter A.
+\end{chatbox}}
+```
+:::
+::: {.column width="50%"}
+```{=latex}
+\begin{chatbox}[equal height group=mtb1]{Math, turn 1}
+Given that f(x) = 4x\textsuperscript{3} - 9x - 14, find the value of f(2).
+\end{chatbox}
+\visible<2->{%
+\begin{chatbox}[colback=green!4, colframe=green!30!gray, equal height group=mtb2]{Math, turn 2}
+Find x such that f(x) = 0.
+\end{chatbox}}
+```
+:::
+::::
+
+```{=latex}
+\vspace{0.4em}
+\visible<3->{\textbf{Ask:} what is the second turn testing?}
+
+\visible<4->{Following a new instruction while building on its \textbf{own} previous answer.}
+
+\vfill
+{\scriptsize Questions from Table 1, \citet{zheng2023judging}.}
+```
+
+## How the experts voted
+
+```{=latex}
+\begin{center}
+\includegraphics[height=1.55in]{images/zheng_fig17_mtbench_vote.png}
+\end{center}
+
+\vspace{-0.4em}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}\small
+  \item<2-> The experts' instructions are nearly word for word the prompt given to GPT-4.
+  \item<3-> So humans and the LLM judge are graded on the \textbf{same rules}.
+\end{itemize}
+
+\vfill
+{\scriptsize Voting interface, Figure 17 in \citet{zheng2023judging}.}
+```
+
+## Chatbot Arena: battles in the wild
+
+```{=latex}
+\begin{center}
+\includegraphics[height=1.45in]{images/zheng_fig19_arena.png}
+\end{center}
+
+\vspace{-0.4em}
+\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}\small
+  \item<2-> Users ask anything, see two \textbf{anonymous} answers, and vote. Names are revealed only afterwards.
+  \item<3-> About 30,000 votes in the first month.
+  \item<4-> Your poll was a mini Arena, except you knew which model was which. \textbf{Why hide the names?}
+\end{itemize}
+
+\vfill
+{\scriptsize Screenshot cropped from Figure 19 in \citet{zheng2023judging}.}
+```
+
+## Two kinds of ground truth
+
+```{=latex}
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & \textbf{MT-Bench} & \textbf{Chatbot Arena} \\
+\midrule
+Questions & Fixed, curated & Whatever users ask \\
+Judges    & 58 experts     & Crowd \\
+Votes     & About 3,000    & About 30,000 \\
+Strength  & Control        & Realism \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{1em}
+\visible<2->{%
+\begin{center}
+Now we have human verdicts. Can an LLM reproduce them, and where does it go wrong?
+\end{center}}
+```
+
 <!--
-NOTE for the opener of the judge/biases part (paper Sec. 3, first paragraph):
-Why do we need a judge at all? Rule-based scores compare an answer to a
-reference answer, but open-ended questions don't have one. The paper names
-BLEU and ROUGE here; we can make the point without naming or defining them,
-e.g. "Automatic scores need a correct answer to compare against. Open-ended
-questions don't have one." Keeps us from defining yet more benchmarks.
+OPTIONAL hook for the Arena slide or Q&A: Arena rankings became important
+enough to game. Meta's Llama 4 ranked high on Arena using an unreleased
+chat-tuned variant (April 2025). A concrete Goodhart's-law example.
+Leave for the agreement part: GPT-4 vs human agreement, and that humans
+changed their vote in 34% of cases after seeing GPT-4's reasoning.
 -->
+
+<!-- ===================== LIMITATIONS (draft) ===================== -->
+
+## How an LLM judge is asked
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
+  \item<1-> \textbf{Pairwise:} question + two answers $\to$ ``A is better,'' ``B is better,'' or tie
+  \item<2-> \textbf{Single answer:} question + one answer $\to$ a score from 1 to 10
+  \item<3-> \textbf{Reference-guided:} same, plus a reference solution (used for math)
+\end{itemize}
+
+\vspace{0.6em}
+\visible<4->{%
+Answers are labeled only ``Assistant A'' and ``Assistant B.''\\
+The judge is \textbf{never told} which model wrote which answer.}
+```
+
+## Four limitations
+
+```{=latex}
+\begin{enumerate}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
+  \item<1-> \textbf{Position bias:} favors an answer because of where it appears
+  \item<2-> \textbf{Verbosity bias:} favors longer answers, even with nothing added
+  \item<3-> \textbf{Self-enhancement bias:} favors its own answers
+  \item<4-> \textbf{Limited reasoning:} misgrades math it can solve on its own
+\end{enumerate}
+
+\vspace{0.6em}
+\visible<5->{\small The default prompt already says to ignore position, length, and names.}
+```
+
+## Position bias
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
+  \item<1-> Test: two near-identical answers to each of 80 questions, judged in both orders
+  \item<2-> A consistent judge picks the same answer after the swap
+\end{itemize}
+
+\visible<3->{%
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Judge & Consistent after swap & Favored first answer \\
+\midrule
+Claude-v1 & 23.8\% & 75.0\% \\
+GPT-3.5   & 46.2\% & 50.0\% \\
+GPT-4     & 65.0\% & 30.0\% \\
+\bottomrule
+\end{tabular}
+\end{center}}
+
+\begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
+  \item<4-> Most judges favor the \textbf{first} answer. Even GPT-4 is inconsistent a third of the time.
+\end{itemize}
+
+\vfill
+{\scriptsize Table 2, default prompt, \citet{zheng2023judging}.}
+```
+
+## Verbosity bias
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
+  \item<1-> ``Repetitive list'' attack on 23 answers that contain a list
+  \item<2-> Rephrase the list and paste it in front: twice as long, \textbf{no new information}
+  \item<3-> Does the judge prefer the padded version?
+\end{itemize}
+
+\visible<4->{%
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+ & Claude-v1 & GPT-3.5 & GPT-4 \\
+\midrule
+Fooled by the padding & 91.3\% & 91.3\% & 8.7\% \\
+\bottomrule
+\end{tabular}
+\end{center}}
+
+\vfill
+{\scriptsize Table 3, \citet{zheng2023judging}. Example in Figure 12.}
+```
+
+## Self-enhancement bias: what the paper found
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
+  \item<1-> Compared each judge's win rates to the human win rates
+  \item<2-> GPT-4 rates itself about \textbf{10\%} higher than humans do
+  \item<3-> Claude-v1 rates itself about \textbf{25\%} higher
+  \item<4-> GPT-3.5 does \textbf{not} favor itself, and judges also favor some other models
+\end{itemize}
+
+\vspace{0.6em}
+\visible<5->{%
+The authors: ``our study cannot determine whether the models exhibit a self-enhancement bias.''}
+
+\vfill
+{\scriptsize Figure 3(b), non-tied first-turn votes, \citet{zheng2023judging}.}
+```
+
+## Self-enhancement: recognition or style?
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
+  \item<1-> \textbf{Recognition:} the judge knows an answer is its own
+    \begin{itemize}
+      \item<2-> It is never told who wrote what, so it could only guess
+    \end{itemize}
+  \item<3-> \textbf{Style preference:} the judge likes its own writing style
+    \begin{itemize}
+      \item<4-> No recognition needed. Its own answers just match its taste.
+    \end{itemize}
+  \item<5-> The paper's data cannot tell these apart, or rule out that the answers really were better
+\end{itemize}
+```
+
+## How strong is the evidence?
+
+```{=latex}
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Test & Sample \\
+\midrule
+Position bias       & 80 questions \\
+Verbosity bias      & 23 answers \\
+Math grading        & 10 questions \\
+Self-enhancement    & win rates for 6 models \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
+  \item<2-> Percentages only: no confidence intervals or significance tests
+  \item<3-> A 10-point gap in win rate could be noise
+  \item<4-> \textbf{Your turn:} how would you test recognition vs.\ style preference?
+\end{itemize}
+```
+
+## Limited reasoning: can you grade this?
+
+```{=latex}
+\begin{chatbox}{Question}
+Benjamin bought 5 sci-fi novels at \$20 each, 3 history books at \$30 each,
+and 2 philosophy books at \$45 each. What was the total cost?
+\end{chatbox}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{chatbox}[colback=blue!5, equal height group=bk]{Assistant A}
+The total cost of Benjamin's purchases was \$115.
+\end{chatbox}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{chatbox}[colback=blue!5, equal height group=bk]{Assistant B}
+The total cost of his purchases is \$295.
+\end{chatbox}
+\end{column}
+\end{columns}
+
+\vspace{0.3em}
+\visible<2->{\small\textbf{Correct answer:} $5 \times 20 + 3 \times 30 + 2 \times 45 = \$280$. Both are wrong.}
+
+\visible<3->{%
+\begin{chatbox}[colback=green!4, colframe=green!30!gray]{GPT-4 judgment}
+\ldots Total cost = \$100 + \$90 + \$90 = \$295. Assistant B's response is accurate\ldots\ [[B]]
+\end{chatbox}}
+
+\visible<4->{\small Asked the question on its own, GPT-4 answers \$280. It was \textbf{misled by the answers}.}
+
+\vfill
+{\scriptsize Question shortened from Figure 13, \citet{zheng2023judging}.}
+```
+
+## Fixing position bias
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
+  \item<1-> \textbf{Swap positions:} judge both orders
+    \begin{itemize}
+      \item<2-> Count a win only if it holds in both orders, otherwise call it a tie
+      \item<3-> This is the rule the paper uses in all later experiments
+    \end{itemize}
+  \item<4-> \textbf{Few-shot:} show the judge three sample judgments
+    \begin{itemize}
+      \item<5-> GPT-4 consistency rises from 65\% to 77.5\%
+      \item<6-> But prompts cost 4$\times$ more, and the examples may add new biases
+    \end{itemize}
+\end{itemize}
+```
+
+## Fixing math grading
+
+```{=latex}
+\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
+  \item<1-> \textbf{Chain of thought:} solve the problem first, then grade
+    \begin{itemize}
+      \item<2-> Still copies the answers' mistakes (Figure 15)
+    \end{itemize}
+  \item<3-> \textbf{Reference-guided:} solve it separately, then grade against that
+\end{itemize}
+
+\visible<4->{%
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Prompt & Default & Chain of thought & Reference \\
+\midrule
+Math grading failures & 14/20 & 6/20 & 3/20 \\
+\bottomrule
+\end{tabular}
+\end{center}}
+
+\visible<5->{\textbf{Verbosity and self-enhancement:} no fix proposed.}
+
+\vfill
+{\scriptsize Table 4: 10 questions, each judged in both orders, \citet{zheng2023judging}.}
+```
+
+<!--
+NOTES for this section
+- Opener idea (paper Sec. 3, first paragraph): no answer key exists for open-ended
+  questions, so instead of a rule-based score we ask a strong LLM to grade. The
+  "No single right answer to check against" bullet already sets this up, so the
+  BLEU/ROUGE point can stay verbal or be dropped.
+- Claude-v1 also shows a NAME bias: with the assistants renamed, its first-position
+  preference drops from 75% to 11% (Table 2, "rename" rows). Good Q&A detail.
+- Position bias is smaller when answer quality differs a lot (Appendix D.1).
+- Chain-of-thought failure example: Figure 15 (GPT-4 copies Assistant B's arithmetic
+  error on |x + 5| < 10).
+- Multi-turn judging (Sec. 3.5): showing the whole conversation in one prompt works
+  better than splitting turns. Skipped for time.
+- Fine-tuned Vicuna judge (Appendix F): preliminary, skipped.
+- Possible Q&A follow-up on self-enhancement (later work, not this paper; check
+  before citing): Panickssery, Bowman & Feng (2024), "LLM Evaluators Recognize and
+  Favor Their Own Generations", report that self-recognition ability correlates with
+  self-preference.
+-->
+
