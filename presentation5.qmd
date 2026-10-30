@@ -56,19 +56,19 @@ include-in-header:
 \begin{itemize}
   \item[]\vspace{-0.75em}\begin{itemize}
     \item<3-> Trained with reinforcement learning from human feedback (RLHF).
-    \item<4-> Tend to better match humans. 
+    \item<3-> Tend to better match humans. 
   \end{itemize}
 \end{itemize}
 
 \vspace{0.8em}
-\visible<5->{%
+\visible<4->{%
 \centering{\Large\bfseries\color{structure} $\rightarrow$ LLM-as-a-Judge}\par}
 \vspace{0.5em}
-\visible<6->{\centering\small Tried before, but never studied systematically.\par}
+\visible<5->{\centering\small Tried before, but never studied systematically.\par}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.38\linewidth}
 \vspace{0pt}
-\visible<5->{\centering\includegraphics[height=1.3in]{images/judge724_crop.png}\par}
+\visible<4->{\centering\includegraphics[height=1.3in]{images/judge724_crop.png}\par}
 \end{minipage}
 ```
 
@@ -100,7 +100,7 @@ include-in-header:
 That is, how well do LLM judges match \textbf{\color{structure}human preferences}?}
 
 \begin{itemize}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
-  \item<5-> (and how do we even \textbf{\color{structure}measure} that?)
+  \item<4-> (and how do we even \textbf{\color{structure}measure} that?)
 \end{itemize}
 ```
 
@@ -121,13 +121,14 @@ That is, how well do LLM judges match \textbf{\color{structure}human preferences
 
 ```{=latex}
 \begin{itemize}\small
-  \item These two are just our example. The paper evaluates up to 15 chatbots, including GPT-4 and Claude.
+  \item The paper evaluates other chatbots as well, including GPT-4 and Claude.
 \end{itemize}
 ```
 
 \vfill
 \scriptsize Photos: PA (llama) and Marshallhenrie (vicuña), Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
+<!-- CUT for time: LLaMA family tree slide. Say instead: "Vicuna is LLaMA fine-tuned on ChatGPT conversations users shared on ShareGPT."
 ## Meet the models: Camelids in the Hot Seat
 
 ```{=latex}
@@ -158,6 +159,8 @@ That is, how well do LLM judges match \textbf{\color{structure}human preferences
 \vspace{0.2em}
 \uncover<7->{\small Both are LLaMA's camelid descendants.}
 ```
+
+-->
 
 ## Meet the judges: LLMs on the bench
 
@@ -199,14 +202,14 @@ That is, how well do LLM judges match \textbf{\color{structure}human preferences
 
 ## Example 1:
 
-:::: {.columns}
-::: {.column width="50%"}
+:::: {.columns align=center}
+::: {.column width="64%"}
 ```{=latex}
 \begin{tcolorbox}[colback=gray!6, colframe=gray!45, boxrule=0.4pt, arc=2mm,
   left=5pt, right=5pt, top=3pt, bottom=4pt,
-  title={\sffamily Question}, fonttitle=\scriptsize\bfseries,
+  title={\sffamily Question}, fonttitle=\small\bfseries,
   coltitle=black, colbacktitle=gray!18]
-\ttfamily\scriptsize\raggedright
+\ttfamily\small\raggedright
 If the FED buys bonds in the secondary market\\[0.3em]
 \textbf<3>{(A) the money supply will increase.}\\
 (B) the money supply will decrease.\\
@@ -216,25 +219,25 @@ Output the answer only.
 \end{tcolorbox}
 ```
 :::
-::: {.column width="50%"}
+::: {.column width="34%"}
 ```{=latex}
 \visible<2->{%
-\begin{tikzpicture}[scale=0.85, >=stealth, font=\scriptsize]
-  \useasboundingbox (-0.7,-0.7) rectangle (5.6,4.3);
+\begin{tikzpicture}[xscale=0.6, yscale=0.8, >=stealth, font=\scriptsize]
+  \useasboundingbox (-0.7,-0.7) rectangle (5.6,4.7);
 
-  \draw[->] (0,0) -- (5,0) node[below left=2pt] {Quantity of money};
-  \draw[->] (0,0) -- (0,4) node[above] {Interest rate};
+  \draw[->] (0,0) -- (5,0) node[below left=2pt] {Money};
+  \draw[->] (0,0) -- (0,4) node[above, xshift=-8pt] {Interest rate};
 
   \draw[thick, domain=0.8:4.6, smooth] plot (\x, {3/\x}) node[right] {$MD$};
 
   % original supply: solid on slide 2, faded on slide 3
   \only<2>{\draw[very thick, blue] (2,0) -- (2,3.6) node[above] {$MS_1$};}
-  \only<3>{\draw[thick, blue!35, dashed] (2,0) -- (2,3.6) node[above] {$MS_1$};}
+  \only<3>{\draw[thick, blue!35, dashed] (2,0) -- (2,3.6) node[above left=0pt and -2pt] {$MS_1$};}
   \draw[dotted] (0,1.5) node[left] {$i_1$} -- (2,1.5);
   \fill (2,1.5) circle (1.6pt);
 
   \only<3>{
-    \draw[very thick, red] (3,0) -- (3,3.6) node[above] {$MS_2$};
+    \draw[very thick, red] (3,0) -- (3,3.6) node[above right=0pt and -2pt] {$MS_2$};
     \draw[->, thick] (2.1,2.8) -- (2.9,2.8);
     \draw[dotted] (0,1) node[left] {$i_2$} -- (3,1);
     \fill[red] (3,1) circle (1.6pt);
@@ -365,43 +368,12 @@ relevant, and detailed.}
 \end{itemize}}
 ```
 
-## Look back at turn 1
-
-:::: {.columns}
-::: {.column width="48%"}
-```{=latex}
-\begin{chatbox}[colback=blue!5, equal height group=turn1]{LLaMA-13B}
-The Federal Reserve buys bonds in the secondary market to increase
-the money supply.
-\end{chatbox}
-```
-:::
-::: {.column width="48%"}
-```{=latex}
-\begin{chatbox}[colback=blue!5, equal height group=turn1]{Vicuna-13B}
-(A) the money supply will increase.
-\end{chatbox}
-```
-:::
-::::
-
-\vspace{0.6em}
-\onslide<2->{\textbf{Both are factually correct.} But...}
-
-\vspace{0.3em}
-\onslide<3->{The prompt said to ``output the answer only."
-
-\begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
-  \item LLaMA provided its own answer.
-  \item Vicuna outputted the correct answer verbatim from the four options listed.
-\end{itemize}}
-
 ## Scores under different benchmarks
 
-Example 1 is an MMLU^[Massive Multitask Language Understanding [@hendrycks2021MMLU]] question.
+Example 1 is an MMLU^[Massive Multitask Language Understanding [@hendrycks2021MMLU]] question. Both answered correctly, but LLaMA ignored "answer only."
 
 ```{=latex}
-\begin{center}
+\begin{center}\small
 \begin{tabular}{lcc}
 \toprule
 Model & MMLU (5-shot) & MT-Bench score (GPT-4) \\
@@ -410,19 +382,16 @@ LLaMA-13B  & 47.0 & 2.61 \\
 Vicuna-13B & 52.1 & 6.39 \\
 \bottomrule
 \end{tabular}
-
-\vspace{-0.4em}
-{\scriptsize Table 8 in the paper. MT-Bench is scored 1--10 by GPT-4.}
 \end{center}
 ```
 
 ```{=latex}
 \begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
   \item<2-> On MMLU: Vicuna leads by 5 points out of 100
-  \item<3-> On MT-Bench: Vicuna leads by almost 4 points out of 10
+  \item<2-> On MT-Bench: Vicuna leads by almost 4 points out of 10
 \end{itemize}
 
-\visible<4->{\textbf{MMLU was not designed to measure human preferences.}}
+\visible<3->{\textbf{MMLU was not designed to measure human preferences.}}
 ```
 
 ## Key topics
@@ -452,16 +421,16 @@ Vicuna-13B & 52.1 & 6.39 \\
 \begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
   \item<1-> Recall Example 1:
     \begin{itemize}
-      \item<2-> MMLU barely separated LLaMA and Vicuna
-      \item<3-> But humans strongly preferred Vicuna
+      \item<1-> MMLU barely separated LLaMA and Vicuna
+      \item<2-> But humans strongly preferred Vicuna
     \end{itemize}
-  \item<4-> Most existing benchmarks measure \textbf{correctness}
+  \item<3-> Most existing benchmarks measure \textbf{correctness}
     \begin{itemize}
-      \item<5-> e.g., MMLU: multiple choice, checked against an answer key
+      \item<3-> e.g., MMLU: multiple choice, checked against an answer key
     \end{itemize}
-  \item<6-> Chatbots are used for \textbf{open-ended}, \textbf{multi-turn} conversations
+  \item<4-> Chatbots are used for \textbf{open-ended}, \textbf{multi-turn} conversations
     \begin{itemize}
-      \item<7-> No single right answer to check against
+      \item<4-> No single right answer to check against
     \end{itemize}
 \end{itemize}
 ```
@@ -496,7 +465,7 @@ Math & Coding & Knowledge (STEM) & Knowledge (humanities) \\
 
 \begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
   \item<3-> Designed to be hard enough to separate strong models
-  \item<4-> Judged by \textbf{58 experts}
+  \item<4-> Judged by \textbf{58 experts}, given nearly the same instructions as GPT-4
 \end{itemize}
 ```
 
@@ -538,6 +507,7 @@ Find x such that f(x) = 0.
 {\scriptsize Questions from Table 1, \citet{zheng2023judging}.}
 ```
 
+<!-- CUT for time: "How the experts voted" slide (Figure 17 screenshot, images/zheng_fig17_mtbench_vote.png). Its point now lives on the MT-Bench slide.
 ## How the experts voted
 
 ```{=latex}
@@ -555,6 +525,8 @@ Find x such that f(x) = 0.
 {\scriptsize Voting interface, Figure 17 in \citet{zheng2023judging}.}
 ```
 
+-->
+
 ## Chatbot Arena: battles in the wild
 
 ```{=latex}
@@ -565,8 +537,8 @@ Find x such that f(x) = 0.
 \vspace{-0.4em}
 \begin{itemize}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}\small
   \item<2-> Users ask anything, see two \textbf{anonymous} answers, and vote. Names are revealed only afterwards.
-  \item<3-> About 30,000 votes in the first month.
-  \item<4-> Your poll was a mini Arena, except you knew which model was which. \textbf{Why hide the names?}
+  \item<2-> About 30,000 votes in the first month.
+  \item<3-> Your poll was a mini Arena, except you knew which model was which. \textbf{Why hide the names?}
 \end{itemize}
 
 \vfill
@@ -611,12 +583,12 @@ changed their vote in 34% of cases after seeing GPT-4's reasoning.
 ```{=latex}
 \begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
   \item<1-> \textbf{Pairwise:} question + two answers $\to$ ``A is better,'' ``B is better,'' or tie
-  \item<2-> \textbf{Single answer:} question + one answer $\to$ a score from 1 to 10
-  \item<3-> \textbf{Reference-guided:} same, plus a reference solution (used for math)
+  \item<1-> \textbf{Single answer:} question + one answer $\to$ a score from 1 to 10
+  \item<1-> \textbf{Reference-guided:} same, plus a reference solution (used for math)
 \end{itemize}
 
 \vspace{0.6em}
-\visible<4->{%
+\visible<2->{%
 Answers are labeled only ``Assistant A'' and ``Assistant B.''\\
 The judge is \textbf{never told} which model wrote which answer.}
 ```
@@ -626,13 +598,13 @@ The judge is \textbf{never told} which model wrote which answer.}
 ```{=latex}
 \begin{enumerate}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
   \item<1-> \textbf{Position bias:} favors an answer because of where it appears
-  \item<2-> \textbf{Verbosity bias:} favors longer answers, even with nothing added
-  \item<3-> \textbf{Self-enhancement bias:} favors its own answers
-  \item<4-> \textbf{Limited reasoning:} misgrades math it can solve on its own
+  \item<1-> \textbf{Verbosity bias:} favors longer answers, even with nothing added
+  \item<1-> \textbf{Self-enhancement bias:} favors its own answers
+  \item<1-> \textbf{Limited reasoning:} misgrades math it can solve on its own
 \end{enumerate}
 
 \vspace{0.6em}
-\visible<5->{\small The default prompt already says to ignore position, length, and names.}
+\visible<2->{\small The default prompt already says to ignore position, length, and names.}
 ```
 
 ## Position bias
@@ -640,10 +612,10 @@ The judge is \textbf{never told} which model wrote which answer.}
 ```{=latex}
 \begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
   \item<1-> Test: two near-identical answers to each of 80 questions, judged in both orders
-  \item<2-> A consistent judge picks the same answer after the swap
+  \item<1-> A consistent judge picks the same answer after the swap
 \end{itemize}
 
-\visible<3->{%
+\visible<2->{%
 \begin{center}
 \begin{tabular}{lcc}
 \toprule
@@ -657,7 +629,7 @@ GPT-4     & 65.0\% & 30.0\% \\
 \end{center}}
 
 \begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
-  \item<4-> Most judges favor the \textbf{first} answer. Even GPT-4 is inconsistent a third of the time.
+  \item<2-> Most judges favor the \textbf{first} answer. Even GPT-4 is inconsistent a third of the time.
 \end{itemize}
 
 \vfill
@@ -669,11 +641,11 @@ GPT-4     & 65.0\% & 30.0\% \\
 ```{=latex}
 \begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
   \item<1-> ``Repetitive list'' attack on 23 answers that contain a list
-  \item<2-> Rephrase the list and paste it in front: twice as long, \textbf{no new information}
-  \item<3-> Does the judge prefer the padded version?
+  \item<1-> Rephrase the list and paste it in front: twice as long, \textbf{no new information}
+  \item<1-> Does the judge prefer the padded version?
 \end{itemize}
 
-\visible<4->{%
+\visible<2->{%
 \begin{center}
 \begin{tabular}{lccc}
 \toprule
@@ -688,38 +660,22 @@ Fooled by the padding & 91.3\% & 91.3\% & 8.7\% \\
 {\scriptsize Table 3, \citet{zheng2023judging}. Example in Figure 12.}
 ```
 
-## Self-enhancement bias: what the paper found
+## Self-enhancement bias
 
 ```{=latex}
-\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
-  \item<1-> Compared each judge's win rates to the human win rates
-  \item<2-> GPT-4 rates itself about \textbf{10\%} higher than humans do
-  \item<3-> Claude-v1 rates itself about \textbf{25\%} higher
-  \item<4-> GPT-3.5 does \textbf{not} favor itself, and judges also favor some other models
+\begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
+  \item<1-> Versus human win rates, GPT-4 rates itself about \textbf{10\%} higher and Claude-v1 about \textbf{25\%}
+  \item<1-> GPT-3.5 does \textbf{not} favor itself
+  \item<2-> Authors: ``our study cannot determine whether the models exhibit a self-enhancement bias''
+  \item<3-> And what would it even mean?
+    \begin{itemize}
+      \item<3-> \textbf{Recognition:} knows the answer is its own, but is never told
+      \item<4-> \textbf{Style preference:} likes its own writing style
+    \end{itemize}
 \end{itemize}
-
-\vspace{0.6em}
-\visible<5->{%
-The authors: ``our study cannot determine whether the models exhibit a self-enhancement bias.''}
 
 \vfill
 {\scriptsize Figure 3(b), non-tied first-turn votes, \citet{zheng2023judging}.}
-```
-
-## Self-enhancement: recognition or style?
-
-```{=latex}
-\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
-  \item<1-> \textbf{Recognition:} the judge knows an answer is its own
-    \begin{itemize}
-      \item<2-> It is never told who wrote what, so it could only guess
-    \end{itemize}
-  \item<3-> \textbf{Style preference:} the judge likes its own writing style
-    \begin{itemize}
-      \item<4-> No recognition needed. Its own answers just match its taste.
-    \end{itemize}
-  \item<5-> The paper's data cannot tell these apart, or rule out that the answers really were better
-\end{itemize}
 ```
 
 ## How strong is the evidence?
@@ -740,12 +696,12 @@ Self-enhancement    & win rates for 6 models \\
 
 \begin{itemize}\setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}
   \item<2-> Percentages only: no confidence intervals or significance tests
-  \item<3-> A 10-point gap in win rate could be noise
-  \item<4-> \textbf{Your turn:} how would you test recognition vs.\ style preference?
+  \item<2-> A 10-point gap in win rate could be noise
+  \item<3-> \textbf{Your turn:} how would you test recognition vs.\ style preference?
 \end{itemize}
 ```
 
-## Limited reasoning: can you grade this?
+## Limited reasoning: misled by the answers
 
 ```{=latex}
 \begin{chatbox}{Question}
@@ -767,49 +723,32 @@ The total cost of his purchases is \$295.
 \end{columns}
 
 \vspace{0.3em}
-\visible<2->{\small\textbf{Correct answer:} $5 \times 20 + 3 \times 30 + 2 \times 45 = \$280$. Both are wrong.}
 
-\visible<3->{%
+\visible<2->{%
 \begin{chatbox}[colback=green!4, colframe=green!30!gray]{GPT-4 judgment}
 \ldots Total cost = \$100 + \$90 + \$90 = \$295. Assistant B's response is accurate\ldots\ [[B]]
 \end{chatbox}}
 
-\visible<4->{\small Asked the question on its own, GPT-4 answers \$280. It was \textbf{misled by the answers}.}
+\visible<3->{\small The correct total is \$280, so \textbf{both} answers are wrong. Asked on its own, GPT-4 gets \$280.}
 
 \vfill
 {\scriptsize Question shortened from Figure 13, \citet{zheng2023judging}.}
 ```
 
-## Fixing position bias
+## What the paper fixes
 
 ```{=latex}
-\begin{itemize}\setlength{\itemsep}{8pt}\setlength{\parskip}{0pt}
-  \item<1-> \textbf{Swap positions:} judge both orders
+\begin{itemize}\setlength{\itemsep}{5pt}\setlength{\parskip}{0pt}
+  \item<1-> \textbf{Position bias:} judge both orders; a win must hold in both, otherwise it is a tie
+  \item<2-> \textbf{Math grading:}
     \begin{itemize}
-      \item<2-> Count a win only if it holds in both orders, otherwise call it a tie
-      \item<3-> This is the rule the paper uses in all later experiments
-    \end{itemize}
-  \item<4-> \textbf{Few-shot:} show the judge three sample judgments
-    \begin{itemize}
-      \item<5-> GPT-4 consistency rises from 65\% to 77.5\%
-      \item<6-> But prompts cost 4$\times$ more, and the examples may add new biases
+      \item<2-> Chain of thought (solve first, then grade) still copies the answers' mistakes
+      \item<2-> Reference-guided (solve separately, grade against that) works best
     \end{itemize}
 \end{itemize}
-```
 
-## Fixing math grading
-
-```{=latex}
-\begin{itemize}\setlength{\itemsep}{6pt}\setlength{\parskip}{0pt}
-  \item<1-> \textbf{Chain of thought:} solve the problem first, then grade
-    \begin{itemize}
-      \item<2-> Still copies the answers' mistakes (Figure 15)
-    \end{itemize}
-  \item<3-> \textbf{Reference-guided:} solve it separately, then grade against that
-\end{itemize}
-
-\visible<4->{%
-\begin{center}
+\visible<2->{%
+\begin{center}\small
 \begin{tabular}{lccc}
 \toprule
 Prompt & Default & Chain of thought & Reference \\
@@ -819,7 +758,7 @@ Math grading failures & 14/20 & 6/20 & 3/20 \\
 \end{tabular}
 \end{center}}
 
-\visible<5->{\textbf{Verbosity and self-enhancement:} no fix proposed.}
+\visible<3->{\textbf{Verbosity and self-enhancement:} no fix proposed.}
 
 \vfill
 {\scriptsize Table 4: 10 questions, each judged in both orders, \citet{zheng2023judging}.}
@@ -839,6 +778,8 @@ NOTES for this section
 - Multi-turn judging (Sec. 3.5): showing the whole conversation in one prompt works
   better than splitting turns. Skipped for time.
 - Fine-tuned Vicuna judge (Appendix F): preliminary, skipped.
+- Few-shot judge (cut for time): three sample judgments raise GPT-4 consistency
+  from 65% to 77.5%, but prompts cost 4x more and may add new biases (Table 12).
 - Possible Q&A follow-up on self-enhancement (later work, not this paper; check
   before citing): Panickssery, Bowman & Feng (2024), "LLM Evaluators Recognize and
   Favor Their Own Generations", report that self-recognition ability correlates with
